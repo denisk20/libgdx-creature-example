@@ -5,6 +5,7 @@ The animation is taken from here (bottom of the page): http://creature.kestrelmo
 
 # To run
 1. Clone 
+2. Open in IntelliJ
 1. Create new `Application` runtime configuration 
 1. Select `desktop` as a module 
 1. Set `android/assets` as working directory
