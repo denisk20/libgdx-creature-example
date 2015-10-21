@@ -1,5 +1,6 @@
 # Libgdx running Creature animation
 An example of running an animation created with Creature (http://creature.kestrelmoon.com/).
+
 The animation is taken from here (bottom of the page): http://creature.kestrelmoon.com/more_info_3.html
 
 # To run
