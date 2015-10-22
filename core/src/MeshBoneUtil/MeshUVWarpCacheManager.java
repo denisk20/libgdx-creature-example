@@ -1,5 +1,4 @@
 package MeshBoneUtil;
-
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -7,10 +6,10 @@ import java.util.HashMap;
 
 /******************************************************************************
  * Creature Runtimes License
- * <p/>
+ *
  * Copyright (c) 2015, Kestrel Moon Studios
  * All rights reserved.
- * <p/>
+ *
  * Preamble: This Agreement governs the relationship between Licensee and Kestrel Moon Studios(Hereinafter: Licensor).
  * This Agreement sets the terms, rights, restrictions and obligations on using [Creature Runtimes] (hereinafter: The Software) created and owned by Licensor,
  * as detailed herein:
@@ -30,7 +29,7 @@ import java.util.HashMap;
  * Including the Right to Create Derivative Works: Licensee may create derivative works based on Software,
  * including amending Software’s source code, modifying it, integrating it into a larger work or removing portions of Software,
  * as long as no distribution of the derivative works is made
- * <p/>
+ *
  * THE RUNTIMES IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -114,14 +113,11 @@ public class MeshUVWarpCacheManager {
 
             MeshRenderRegion set_region = regions_map.get(cur_key);
             if (set_region.getUseUvWarp()) {
-                Vector2 final_local_offset = base_data.getUvWarpLocalOffset().cpy().scl(1.0f - ratio).add(
-                        end_data.getUvWarpLocalOffset().cpy().scl(ratio));
+                Vector2 final_local_offset = base_data.getUvWarpLocalOffset();
 
-                Vector2 final_global_offset = base_data.getUvWarpGlobalOffset().cpy().scl(1.0f - ratio).add(
-                        end_data.getUvWarpGlobalOffset().cpy().scl(ratio));
+                Vector2 final_global_offset = base_data.getUvWarpGlobalOffset();
 
-                Vector2 final_scale = base_data.getUvWarpScale().cpy().scl(1.0f - ratio).add(
-                        end_data.getUvWarpScale().cpy().scl(ratio));
+                Vector2 final_scale = base_data.getUvWarpScale();
                 /*
                 Vector2 final_local_offset = ((1.0f - ratio) * base_data.getUvWarpLocalOffset()) +
                         (ratio * end_data.getUvWarpLocalOffset());

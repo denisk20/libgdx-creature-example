@@ -2,14 +2,15 @@ package MeshBoneUtil;
 
 import com.badlogic.gdx.utils.JsonValue;
 
+import java.util.Arrays;
 import java.util.Vector;
 
 /******************************************************************************
  * Creature Runtimes License
- * <p/>
+ *
  * Copyright (c) 2015, Kestrel Moon Studios
  * All rights reserved.
- * <p/>
+ *
  * Preamble: This Agreement governs the relationship between Licensee and Kestrel Moon Studios(Hereinafter: Licensor).
  * This Agreement sets the terms, rights, restrictions and obligations on using [Creature Runtimes] (hereinafter: The Software) created and owned by Licensor,
  * as detailed herein:
@@ -29,7 +30,7 @@ import java.util.Vector;
  * Including the Right to Create Derivative Works: Licensee may create derivative works based on Software,
  * including amending Software’s source code, modifying it, integrating it into a larger work or removing portions of Software,
  * as long as no distribution of the derivative works is made
- * <p/>
+ *
  * THE RUNTIMES IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,9 +45,9 @@ import java.util.Vector;
 public class Creature {
     // mesh and skeleton data
     public Vector<Integer> global_indices;
-    public Vector<Float> global_pts, global_uvs;
-    public Vector<Float> render_pts;
-    public Vector<Float> render_colours;
+    public float[] global_pts, global_uvs;
+    public float[] render_pts;
+    public float[] render_colours;
     public int total_num_pts, total_num_indices;
     public MeshRenderBoneComposition render_composition;
 
@@ -67,10 +68,10 @@ public class Creature {
     public void FillRenderColours(float r, float g, float b, float a) {
         for (int i = 0; i < total_num_pts; i++) {
             int cur_colour_index = i * 4;
-            render_colours.set(0 + cur_colour_index, r);
-            render_colours.set(1 + cur_colour_index, g);
-            render_colours.set(2 + cur_colour_index, b);
-            render_colours.set(3 + cur_colour_index, a);
+            render_colours[0 + cur_colour_index] = r;
+            render_colours[1 + cur_colour_index] = g;
+            render_colours[2 + cur_colour_index] = b;
+            render_colours[3 + cur_colour_index] = a;
         }
     }
 
@@ -79,7 +80,7 @@ public class Creature {
         JsonValue json_mesh = load_data.get("mesh");
 
         global_pts = CreatureModuleUtils.ReadFloatArray3DJSON(json_mesh, "points");
-        total_num_pts = global_pts.size() / 3;
+        total_num_pts = global_pts.length / 3;
 
         global_indices = CreatureModuleUtils.ReadIntArrayJSON(json_mesh, "indices");
         total_num_indices = global_indices.size();
@@ -92,14 +93,10 @@ public class Creature {
         }
         */
 
-        float[] tmp_bytes = new float[total_num_pts * 4];
-        render_colours = new Vector<Float>();
-        for (int i = 0; i < tmp_bytes.length; i++) {
-            render_colours.add(tmp_bytes[i]);
-        }
+        render_colours = new float[total_num_pts * 4];
         FillRenderColours(1, 1, 1, 1);
 
-        render_pts = new Vector<Float>(global_pts);
+        render_pts = Arrays.copyOf(global_pts, global_pts.length);
 
         // Load bones
         MeshBone root_bone = CreatureModuleUtils.CreateBones(load_data,

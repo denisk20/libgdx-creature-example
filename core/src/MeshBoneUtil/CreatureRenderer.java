@@ -1,9 +1,9 @@
 /******************************************************************************
  * Creature Runtimes License
- * <p/>
+ *
  * Copyright (c) 2015, Kestrel Moon Studios
  * All rights reserved.
- * <p/>
+ *
  * Preamble: This Agreement governs the relationship between Licensee and Kestrel Moon Studios(Hereinafter: Licensor).
  * This Agreement sets the terms, rights, restrictions and obligations on using [Creature Runtimes] (hereinafter: The Software) created and owned by Licensor,
  * as detailed herein:
@@ -23,7 +23,7 @@
  * Including the Right to Create Derivative Works: Licensee may create derivative works based on Software,
  * including amending Software’s source code, modifying it, integrating it into a larger work or removing portions of Software,
  * as long as no distribution of the derivative works is made
- * <p/>
+ *
  * THE RUNTIMES IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -46,8 +46,6 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
-
-import java.util.Vector;
 
 
 /**
@@ -106,29 +104,30 @@ public class CreatureRenderer {
         int vert_offset = 3 + 4 + 2;
         int pt_index = 0, uv_index = 0, color_index = 0;
         Creature target_creature = creature_manager.target_creature;
-        Vector<Float> read_pts = target_creature.render_pts;
-        Vector<Float> read_uvs = target_creature.global_uvs;
-        Vector<Float> read_colours = target_creature.render_colours;
+        float[] read_pts = target_creature.render_pts;
+        float[] read_uvs = target_creature.global_uvs;
+        float[] read_colours = target_creature.render_colours;
 
 
         for (int i = 0; i < vertices.length; i += vert_offset) {
-            vertices[i + 0] = read_pts.get(pt_index + 0);
-            vertices[i + 1] = read_pts.get(pt_index + 1);
-            vertices[i + 2] = read_pts.get(pt_index + 2);
+            vertices[i + 0] = read_pts[pt_index + 0];
+            vertices[i + 1] = read_pts[pt_index + 1];
+            vertices[i + 2] = read_pts[pt_index + 2];
 
-            vertices[i + 3] = read_colours.get(color_index + 0);
-            vertices[i + 4] = read_colours.get(color_index + 1);
-            vertices[i + 5] = read_colours.get(color_index + 2);
-            vertices[i + 6] = read_colours.get(color_index + 3);
+            vertices[i + 3] = read_colours[color_index + 0];
+            vertices[i + 4] = read_colours[color_index + 1];
+            vertices[i + 5] = read_colours[color_index + 2];
+            vertices[i + 6] = read_colours[color_index + 3];
 
-            vertices[i + 7] = read_uvs.get(uv_index + 0);
-            vertices[i + 8] = read_uvs.get(uv_index + 1);
+            vertices[i + 7] = read_uvs[uv_index + 0];
+            vertices[i + 8] = read_uvs[uv_index + 1];
 
             pt_index += 3;
             uv_index += 2;
             color_index += 4;
         }
 
+        int vertCnt = vertices.length << 2;
         render_mesh.setVertices(vertices);
     }
 

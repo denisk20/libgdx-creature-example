@@ -15,11 +15,17 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.JsonValue;
 
+import java.io.File;
+
+
 public class GdxCreatureGame extends ApplicationAdapter {
     OrthographicCamera camera;
     SpriteBatch batch;
-    CreatureManager active_creature_manager;
-    CreatureRenderer active_creature_render;
+    CreatureManager active_creature_manager, active_creature_manager_2;
+    CreatureRenderer active_creature_render, active_creature_render_2;
+
+    static final String CREATURE_DIR = "Ue4_export" + File.separator;
+    private Texture new_texture;
 
     @Override
     public void create() {
@@ -29,7 +35,7 @@ public class GdxCreatureGame extends ApplicationAdapter {
 
         System.out.println("Loading json...");
         // Load json
-        JsonValue json_data = CreatureModuleUtils.LoadCreatureJSONData("Ue4_export/character_raptor_data.json");
+        JsonValue json_data = CreatureModuleUtils.LoadCreatureJSONData(CREATURE_DIR + "character_raptor_data.json");
 
         System.out.println("Loading creature...");
         // Create creature
@@ -61,7 +67,7 @@ public class GdxCreatureGame extends ApplicationAdapter {
         final String FRAGMENT = Gdx.files.internal("MeshBoneShader.frag").readString();
         ShaderProgram program = new ShaderProgram(VERTEX, FRAGMENT);
 
-        Texture new_texture = new Texture(Gdx.files.internal("Ue4_export/character_raptor_img.tga"));
+        new_texture = new Texture(Gdx.files.internal(CREATURE_DIR + "character_raptor_img.tga"));
 
         // Create the creature render object
         active_creature_render = new CreatureRenderer(new_creature_manager,
@@ -73,21 +79,81 @@ public class GdxCreatureGame extends ApplicationAdapter {
         Matrix4 xform = new Matrix4();
         xform.scl(.5f);
         active_creature_render.SetXform(xform);
+
+
+
+/*
+
+        // Instancing 2nd creature example
+        Creature new_creature_2 = new Creature(json_data);
+        active_creature_manager_2 = new CreatureManager(new_creature_2);
+        active_creature_manager_2.AddAnimation(new_animation1);
+        active_creature_manager_2.AddAnimation(new_animation2);
+        active_creature_manager_2.SetActiveAnimationName("standing", false);
+        active_creature_manager_2.SetIsPlaying(true);
+        active_creature_manager_2.SetShouldLoop(true);
+        active_creature_manager_2.SetUseCustomTimeRane(true);
+        active_creature_manager_2.SetCustomTimeRange(50, 120);
+
+        // This is an example of how to set a custom override callback function
+        // to modify the bones during playback. In this example, we are displacing
+        // the bones in the character by a fixed amount in y
+        active_creature_manager_2.SetBonesOverrideCallback(
+                new CreatureManager.BonesCallback() {
+                    public void run(HashMap<String, MeshBone> bones_map)
+                    {
+                        for (Map.Entry<String, MeshBone> entry : bones_map.entrySet()) {
+                            MeshBone cur_bone = entry.getValue();
+                            Vector3 cur_start_pt = cur_bone.getWorldStartPt();
+                            Vector3 cur_end_pt = cur_bone.getWorldEndPt();
+
+                            cur_start_pt.y += 17.5;
+                            cur_end_pt.y += 17.5;
+
+                            cur_bone.setWorldStartPt(cur_start_pt);
+                            cur_bone.setWorldEndPt(cur_end_pt);
+                        }
+                    }
+                }
+        );
+
+        active_creature_render_2 = new CreatureRenderer(active_creature_manager_2,
+                new_texture,
+                program,
+                camera);
+
+        // Set a transformation matrix for the creature
+        Matrix4 xform2 = new Matrix4();
+        xform2.scl(-1, 1, 1);
+        xform2.translate(-5, -15, 0);
+        active_creature_render_2.SetXform(xform2);
+
+*/
     }
 
     @Override
     public void render() {
         //Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.end();
 
         camera.update();
-        active_creature_manager.Update(Gdx.graphics.getDeltaTime());
 
+        active_creature_manager.Update(Gdx.graphics.getDeltaTime());
+        active_creature_render.Flush();
+
+        active_creature_manager.Update(Gdx.graphics.getDeltaTime());
         active_creature_render.Flush();
     }
 
+    @Override
+    public void dispose() {
+        new_texture.dispose();
+    }
+
+    public void resize(int width, int height) {
+        //camera.setToOrtho(false);
+    }
 }

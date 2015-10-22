@@ -15,10 +15,10 @@ import java.util.Vector;
 
 /******************************************************************************
  * Creature Runtimes License
- * <p/>
+ *
  * Copyright (c) 2015, Kestrel Moon Studios
  * All rights reserved.
- * <p/>
+ *
  * Preamble: This Agreement governs the relationship between Licensee and Kestrel Moon Studios(Hereinafter: Licensor).
  * This Agreement sets the terms, rights, restrictions and obligations on using [Creature Runtimes] (hereinafter: The Software) created and owned by Licensor,
  * as detailed herein:
@@ -38,7 +38,7 @@ import java.util.Vector;
  * Including the Right to Create Derivative Works: Licensee may create derivative works based on Software,
  * including amending Software’s source code, modifying it, integrating it into a larger work or removing portions of Software,
  * as long as no distribution of the derivative works is made
- * <p/>
+ *
  * THE RUNTIMES IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -92,20 +92,22 @@ public class CreatureModuleUtils {
         return ret_list;
     }
 
-    public static Vector<Float> ReadFloatArray3DJSON(JsonValue data,
-                                                     String key) {
+    public static float[] ReadFloatArray3DJSON(JsonValue data, String key) {
         float[] raw_array = getFloatArray(data.get(key));
-
-        Vector<Float> ret_list = new Vector<Float>();
         int num_points = raw_array.length / 2;
+        float[] ret_array = new float[num_points * 3];
+
+        int j = 0;
         for (int i = 0; i < num_points; i++) {
             int cur_index = i * 2;
-            ret_list.add((float) raw_array[0 + cur_index]);
-            ret_list.add((float) raw_array[1 + cur_index]);
-            ret_list.add((float) 0);
+            ret_array[j + 0] = (float) raw_array[0 + cur_index];
+            ret_array[j + 1] = (float) raw_array[1 + cur_index];
+            ret_array[j + 2] = 0;
+
+            j += 3;
         }
 
-        return ret_list;
+        return ret_array;
     }
 
     public static boolean ReadBoolJSON(JsonValue data,
@@ -114,15 +116,10 @@ public class CreatureModuleUtils {
         return val;
     }
 
-    public static Vector<Float> ReadFloatArrayJSON(JsonValue data,
-                                                   String key) {
+    public static float[] ReadFloatArrayJSON(JsonValue data,
+                                             String key) {
         float[] raw_array = getFloatArray(data.get(key));
-        Vector<Float> ret_list = new Vector<Float>();
-        for (int i = 0; i < raw_array.length; i++) {
-            ret_list.add(raw_array[i]);
-        }
-
-        return ret_list;
+        return raw_array;
     }
 
     public static Vector<Integer> ReadIntArrayJSON(JsonValue data,
@@ -219,8 +216,8 @@ public class CreatureModuleUtils {
     public static Vector<MeshRenderRegion> CreateRegions(JsonValue json_obj,
                                                          String key,
                                                          Vector<Integer> indices_in,
-                                                         Vector<Float> rest_pts_in,
-                                                         Vector<Float> uvs_in) {
+                                                         float[] rest_pts_in,
+                                                         float[] uvs_in) {
         Vector<MeshRenderRegion> ret_regions = new Vector<MeshRenderRegion>();
         JsonValue base_obj = json_obj.get(key);
 
@@ -245,13 +242,13 @@ public class CreatureModuleUtils {
             new_region.setTagId(cur_id);
 
             // Read in weights
-            HashMap<String, Vector<Float>> weight_map =
+            HashMap<String, float[]> weight_map =
                     new_region.normal_weight_map;
             JsonValue weight_obj = cur_node.get("weights");
 
             for (JsonValue w_node = weight_obj.child; w_node != null; w_node = w_node.next) {
                 String w_key = w_node.name;
-                Vector<Float> values = ReadFloatArrayJSON(weight_obj, w_key);
+                float[] values = ReadFloatArrayJSON(weight_obj, w_key);
                 weight_map.put(w_key, values);
             }
 
