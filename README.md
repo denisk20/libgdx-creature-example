@@ -1,3 +1,6 @@
+# Deprecated
+See the official Creature Libgdx runtime: https://github.com/kestrelm/Creature_LibGDX
+
 # Libgdx running Creature animation
 An example of running an animation created with Creature (http://creature.kestrelmoon.com/).
 
